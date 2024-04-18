@@ -1,9 +1,4 @@
-<!--헤더-->
-<img src="https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=678%20Project&fontAlign=50&fontAlignY=50&descAlign=100&textBg=false&fontColor=black&animation=twinkling&fontSize=90" />
 
-### 678 노션 => [notion_link](https://www.notion.so/678-a00e001a30254db1b99d082ae94a67dc)
-
-# 678 산책 메이트
 
 ## 목차
 - [프로젝트소개](#프로젝트소개)
@@ -78,13 +73,6 @@
 ## 기능
 
 ### 회원가입
-![회원가입](https://ifh.cc/g/koNwAH.png)
-- 새로운 사용자를 위한 회원가입 기능입니다. 이메일 인증을 통해 회원가입을 완료할 수 있습니다.
 
----
-
-### 로그인
-![로그인](https://ifh.cc/g/X2Wp94.png)
-- 기존 사용자들이 서비스에 로그인하는 기능입니다. 안전한 인증을 위해 사용됩니다.
 
 
