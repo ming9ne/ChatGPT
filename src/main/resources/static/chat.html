@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Main Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-header {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+        .chat-messages {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 260px); /* Adjust the height here */
+            display: flex;
+            flex-direction: column;
+        }
+        .message-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+        .message-container.sent {
+            justify-content: flex-end;
+        }
+        .message {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 70%;
+        }
+        .message.sent {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        .message .user {
+            font-weight: bold;
+        }
+        .message .time {
+            font-size: 12px;
+            color: #888;
+            margin-left: 10px;
+        }
+        .chat-input {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="/main">Chat GPT App</a>
+
+        <!-- Navbar toggler -->
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <!-- Chat link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/chat">채팅하기</a>
+                </li>
+                <!-- Chat log link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatLog">채팅로그</a>
+                </li>
+                <!-- Upload link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/upload">학생 명부 업로드</a>
+                </li>
+            </ul>
+            <!-- Logout button -->
+            <form class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-danger my-2 my-sm-0" type="button" onclick="logout()">로그아웃</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Chat container -->
+<div class="chat-container">
+    <div class="chat-header">Chat GPT4 </div>
+    <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be displayed here -->
+    </div>
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="메시지를 입력하세요...">
+        <button onclick="sendMessage()">전송</button>
+    </div>
+</div>
+
+<!-- Bootstrap JS (jQuery is required) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- xlsx library for reading excel files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+<script>
+    // Function to logout
+    function logout() {
+        // Implement logout functionality here
+        window.location.href = "/"; // Redirect to login page
+    }
+
+    // Function to send message
+    function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value.trim();
+        if (message === '') {
+            return;
+        }
+
+        // Append message to chat messages container
+        appendMessage('나', message);
+
+        // Clear message input
+        messageInput.value = '';
+
+        // Scroll to bottom of chat messages
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Send message to server
+        sendToServer(message);
+    }
+
+    // Function to append message to chat
+    function appendMessage(user, message) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        messageElement.textContent = message;
+
+        const userElement = document.createElement('span');
+        userElement.classList.add('user');
+        userElement.textContent = user + ': ';
+
+        if (user === 'GPT') {
+            messageContainer.classList.add('sent');
+            messageElement.classList.add('sent');
+            messageContainer.appendChild(messageElement);
+            chatMessages.appendChild(messageContainer);
+        } else {
+            messageContainer.appendChild(userElement);
+            messageContainer.appendChild(messageElement);
+            chatMessages.appendChild(messageContainer);
+        }
+    }
+
+    // Function to send message to server
+    function sendToServer(message) {
+        // Create request object
+        const request = {
+            model: "gpt-3.5-turbo-instruct",
+            prompt: message,
+            max_tokens: 1000,
+            temperature: 0
+        };
+
+        // Send POST request to server
+        fetch('/api/v1/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getOpenaiApiKey() // Function to get OpenAI API key
+            },
+            body: JSON.stringify(request)
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle response from server
+                console.log(data);
+                appendMessage('GPT', data.choices[0].text);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error as needed
+            });
+    }
+
+    // Function to get current time
+    function getCurrentTime() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
+    // Function to get OpenAI API key (replace with your actual implementation)
+    function getOpenaiApiKey() {
+        return 'sk-yVT04Lur7S8pnJ3fjMRnT3BlbkFJZjblrPqRzA7bxK88SDb7Y';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Main Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="/main">Chat GPT App</a>
+
+        <!-- Navbar toggler -->
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <!-- Chat link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/chat">채팅하기</a>
+                </li>
+                <!-- Chat log link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatLog">채팅로그</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/upload">학생 명부 업로드</a>
+                </li>
+            </ul>
+            <!-- Logout button -->
+            <form class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-danger my-2 my-sm-0" type="button" onclick="logout()">로그아웃</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- Content area -->
+<div class="container mt-4">
+    <h2>Main Page</h2>
+</div>
+
+<!-- Bootstrap JS (jQuery is required) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- xlsx library for reading excel files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+<script>
+
+    // Function to logout
+    function logout() {
+        // Implement logout functionality here
+        window.location.href = "/"; // Redirect to login page
+    }
+</script>
+</body>
+</html>
